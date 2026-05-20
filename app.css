@@ -943,6 +943,53 @@ textarea { font-family: var(--font); font-size: .9rem; resize: vertical; }
   white-space: nowrap;
   flex-shrink: 0;
 }
+/* Badge de status do coletor nos cards do usuário */
+.collector-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .8rem;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: var(--radius);
+  margin: 8px 0 4px;
+}
+.collector-badge--waiting {
+  background: var(--gray-100);
+  color: var(--gray-500);
+}
+.collector-badge--aceito {
+  background: #fef3c7;
+  color: #92400e;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+.collector-badge--done {
+  background: var(--green-100);
+  color: var(--green-700);
+}
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .7; }
+}
+
+/* Linha do coletor no card de próxima coleta (dashboard) */
+.pickup-preview__collector {
+  font-size: .78rem;
+  font-weight: 600;
+  margin-top: 6px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+}
+.pickup-preview__collector--aceito {
+  background: #fef3c7;
+  color: #92400e;
+}
+.pickup-preview__collector--done {
+  background: var(--green-100);
+  color: var(--green-700);
+}
+
 .pool-card__obs {
   font-size: .8rem;
   color: var(--gray-500);

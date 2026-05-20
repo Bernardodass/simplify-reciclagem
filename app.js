@@ -321,14 +321,34 @@ function renderDashboard() {
   const nextEl = document.getElementById('nextPickup');
   if (upcoming.length) {
     const p = upcoming[0];
+    const poolItem = getPoolItem(p.id);
+    const collectorAccepted = poolItem && poolItem.status === 'aceito';
+    const collectorDone     = poolItem && poolItem.status === 'concluido';
+
+    let statusBadge, collectorLine;
+    if (collectorDone) {
+      statusBadge  = `<div class="pickup-preview__badge" style="background:#16a34a">✅ Concluído</div>`;
+      collectorLine = `<div class="pickup-preview__collector pickup-preview__collector--done">✅ Coletado por ${poolItem.collectorName}</div>`;
+    } else if (collectorAccepted) {
+      statusBadge  = `<div class="pickup-preview__badge" style="background:#f59e0b">🚛 A caminho</div>`;
+      collectorLine = `<div class="pickup-preview__collector pickup-preview__collector--aceito">🚛 ${poolItem.collectorName} está a caminho!</div>`;
+    } else if (poolItem) {
+      statusBadge  = `<div class="pickup-preview__badge">Aguardando coletor</div>`;
+      collectorLine = `<div class="pickup-preview__collector">⏳ Nenhum coletor aceitou ainda</div>`;
+    } else {
+      statusBadge  = `<div class="pickup-preview__badge">Confirmado</div>`;
+      collectorLine = '';
+    }
+
     nextEl.innerHTML = `
       <div class="pickup-preview">
         <div class="pickup-preview__icon">📦</div>
-        <div>
+        <div style="flex:1">
           <div class="pickup-preview__date">${fmtDate(p.date)}</div>
           <div class="pickup-preview__meta">⏰ ${p.time} · ${p.materials.join(', ')} · ${p.weight || '?'} kg</div>
+          ${collectorLine}
         </div>
-        <div class="pickup-preview__badge">Confirmado</div>
+        ${statusBadge}
       </div>`;
   } else {
     nextEl.innerHTML = `
@@ -366,7 +386,25 @@ function renderPickupList() {
   el.innerHTML = sorted.map(p => {
     const statusLabel = { confirmed: 'Agendado', completed: 'Concluído', cancelled: 'Cancelado' }[p.status] || p.status;
     const canCancel = p.status === 'confirmed' && p.date >= today();
-    const canComplete = p.status === 'confirmed' && p.date <= today();
+
+    // Verifica situação no pool global
+    const poolItem = getPoolItem(p.id);
+    const collectorAccepted = poolItem && poolItem.status === 'aceito';
+    const collectorDone     = poolItem && poolItem.status === 'concluido';
+    // Só mostra botão manual se não há coletor envolvido
+    const canComplete = p.status === 'confirmed' && p.date <= today() && !collectorAccepted && !collectorDone;
+
+    let collectorBadge = '';
+    if (p.status === 'confirmed') {
+      if (collectorDone) {
+        collectorBadge = `<div class="collector-badge collector-badge--done">✅ Coletado por ${poolItem.collectorName}</div>`;
+      } else if (collectorAccepted) {
+        collectorBadge = `<div class="collector-badge collector-badge--aceito">🚛 ${poolItem.collectorName} aceitou — a caminho!</div>`;
+      } else if (poolItem) {
+        collectorBadge = `<div class="collector-badge collector-badge--waiting">⏳ Aguardando um coletor aceitar</div>`;
+      }
+    }
+
     return `
     <div class="pickup-card" id="pc-${p.id}">
       <div class="pickup-card__header">
@@ -377,6 +415,7 @@ function renderPickupList() {
       <div class="pickup-card__materials">
         ${p.materials.map(m => `<span class="mat-chip">${m}</span>`).join('')}
       </div>
+      ${collectorBadge}
       <div class="pickup-card__actions">
         ${canComplete ? `<button class="btn btn--primary btn--sm" onclick="completePickup('${p.id}')">✅ Marcar como concluída</button>` : ''}
         ${canCancel ? `<button class="btn btn--ghost btn--sm" onclick="openConfirm('${p.id}')">Cancelar</button>` : ''}
@@ -716,6 +755,52 @@ document.addEventListener('DOMContentLoaded', () => {
     loginDemo();
   });
 
+  // Esqueceu a senha
+  document.getElementById('forgotBtn').addEventListener('click', e => {
+    e.preventDefault();
+    openForgot();
+  });
+
+  document.getElementById('forgotEmailForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('forgotEmail').value.trim();
+    const users = DB.get('users') || [];
+    const found = users.find(u => u.email === email);
+    if (!found) {
+      showToast('E-mail não encontrado.', 'error');
+      return;
+    }
+    // Guarda o email encontrado para usar no passo 2
+    document.getElementById('forgotEmailForm').dataset.email = email;
+    document.getElementById('forgotStep1').hidden = true;
+    document.getElementById('forgotStep2').hidden = false;
+  });
+
+  document.getElementById('forgotResetForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const newPwd  = document.getElementById('newPassword').value;
+    const confirm = document.getElementById('confirmPassword').value;
+    if (newPwd !== confirm) {
+      showToast('As senhas não coincidem.', 'error');
+      return;
+    }
+    const email = document.getElementById('forgotEmailForm').dataset.email;
+    const users = DB.get('users') || [];
+    const idx = users.findIndex(u => u.email === email);
+    if (idx < 0) return;
+    users[idx].password = newPwd;
+    DB.set('users', users);
+    // Atualiza também o perfil salvo per-user
+    const profile = DB.get('u_' + users[idx].id);
+    if (profile) { profile.password = newPwd; DB.set('u_' + users[idx].id, profile); }
+    document.getElementById('forgotStep2').hidden = true;
+    document.getElementById('forgotStep3').hidden = false;
+  });
+
+  document.getElementById('forgotOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('forgotOverlay')) closeForgot();
+  });
+
   // Login form
   document.getElementById('loginForm').addEventListener('submit', e => {
     e.preventDefault();
@@ -818,6 +903,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ─── Pool de coletas (compartilhado entre usuários/coletores) ────────────────
+function getPoolItem(pickupId) {
+  const pool = DB.get('pool') || [];
+  return pool.find(p => p.pickupId === pickupId) || null;
+}
 function addToPool(pickup) {
   const pool = DB.get('pool') || [];
   pool.push({
@@ -970,6 +1059,33 @@ function completePoolPickup(poolId) {
   renderCollector();
 }
 
+// ─── Recuperação de senha ────────────────────────────────
+function openForgot() {
+  // Reseta para o passo 1
+  document.getElementById('forgotStep1').hidden = false;
+  document.getElementById('forgotStep2').hidden = true;
+  document.getElementById('forgotStep3').hidden = true;
+  document.getElementById('forgotEmail').value = '';
+  document.getElementById('newPassword').value = '';
+  document.getElementById('confirmPassword').value = '';
+  const overlay = document.getElementById('forgotOverlay');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+  setTimeout(() => document.getElementById('forgotEmail').focus(), 100);
+}
+
+function closeForgot() {
+  const overlay = document.getElementById('forgotOverlay');
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+  // Se chegou no passo 3 (sucesso), pré-preenche o email no login
+  const step3 = document.getElementById('forgotStep3');
+  if (!step3.hidden) {
+    const email = document.getElementById('forgotEmailForm').dataset.email;
+    if (email) document.getElementById('loginEmail').value = email;
+  }
+}
+
 // ─── Sidebar (mobile) ────────────────────────────────────
 function toggleSidebar() {
   const s = document.getElementById('sidebar');
@@ -991,3 +1107,4 @@ window.showWasteInfo       = showWasteInfo;
 window.renderCollector     = renderCollector;
 window.acceptPickup        = acceptPickup;
 window.completePoolPickup  = completePoolPickup;
+window.closeForgot         = closeForgot;
