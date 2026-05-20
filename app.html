@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simplify — App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<!-- ===================== AUTH ===================== -->
+<div id="authScreen">
+  <div class="auth-wrap">
+    <div class="auth-brand">
+      <span class="auth-logo">♻</span>
+      <span>Simplify</span>
+    </div>
+    <p class="auth-tagline">Recicle sem complicação</p>
+
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Entrar</button>
+        <button class="auth-tab" data-tab="register">Cadastrar</button>
+      </div>
+
+      <form id="loginForm" class="auth-form">
+        <div class="field">
+          <label>E-mail</label>
+          <input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label>Senha</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn btn--primary btn--full">Entrar</button>
+        <p class="auth-hint">Não tem conta? <a href="#" data-switch="register">Cadastre-se grátis</a></p>
+        <p class="auth-hint"><a href="#" id="demoBtn">Entrar com conta demo</a></p>
+      </form>
+
+      <form id="registerForm" class="auth-form" hidden>
+        <div class="field">
+          <label>Nome completo</label>
+          <input type="text" id="regName" placeholder="Seu nome" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label>E-mail</label>
+          <input type="email" id="regEmail" placeholder="seu@email.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label>Senha</label>
+          <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" minlength="6" required>
+        </div>
+        <div class="field">
+          <label>Cidade</label>
+          <select id="regCity">
+            <option value="São Paulo">São Paulo</option>
+            <option value="Rio de Janeiro">Rio de Janeiro</option>
+            <option value="Belo Horizonte">Belo Horizonte</option>
+            <option value="Curitiba">Curitiba</option>
+            <option value="Porto Alegre">Porto Alegre</option>
+            <option value="Salvador">Salvador</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tipo de conta</label>
+          <select id="regRole">
+            <option value="user">👤 Usuário — quero agendar coletas</option>
+            <option value="collector">🚛 Coletor — quero aceitar coletas</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn--primary btn--full">Criar conta gratuita</button>
+        <p class="auth-hint">Já tem conta? <a href="#" data-switch="login">Entrar</a></p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== APP SHELL ===================== -->
+<div id="appShell" hidden>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <span class="sidebar__logo">♻</span>
+      <span class="sidebar__name">Simplify</span>
+    </div>
+
+    <nav class="sidebar__nav">
+      <!-- Itens de usuário -->
+      <a class="nav-item active user-only" data-view="dashboard">
+        <span class="nav-item__icon">🏠</span>
+        <span class="nav-item__label">Dashboard</span>
+      </a>
+      <a class="nav-item user-only" data-view="agendar">
+        <span class="nav-item__icon">📅</span>
+        <span class="nav-item__label">Agendar Coleta</span>
+      </a>
+      <a class="nav-item user-only" data-view="mapa">
+        <span class="nav-item__icon">🗺️</span>
+        <span class="nav-item__label">Mapa de Pontos</span>
+      </a>
+      <a class="nav-item user-only" data-view="classificar">
+        <span class="nav-item__icon">🤖</span>
+        <span class="nav-item__label">Classificar Resíduo</span>
+      </a>
+      <a class="nav-item user-only" data-view="impacto">
+        <span class="nav-item__icon">📊</span>
+        <span class="nav-item__label">Meu Impacto</span>
+      </a>
+      <a class="nav-item user-only" data-view="recompensas">
+        <span class="nav-item__icon">🎁</span>
+        <span class="nav-item__label">Recompensas</span>
+      </a>
+      <!-- Itens de coletor -->
+      <a class="nav-item collector-only" data-view="coletas">
+        <span class="nav-item__icon">📋</span>
+        <span class="nav-item__label">Coletas Disponíveis</span>
+      </a>
+      <a class="nav-item collector-only" data-view="mapa">
+        <span class="nav-item__icon">🗺️</span>
+        <span class="nav-item__label">Mapa de Pontos</span>
+      </a>
+      <a class="nav-item collector-only" data-view="classificar">
+        <span class="nav-item__icon">🤖</span>
+        <span class="nav-item__label">Classificar Resíduo</span>
+      </a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="sidebar__user-info" id="sidebarUser"></div>
+      <button class="logout-btn" id="logoutBtn">↩ Sair</button>
+    </div>
+  </aside>
+
+  <!-- Main area -->
+  <div class="app-body">
+
+    <!-- Mobile header -->
+    <header class="app-topbar">
+      <button class="topbar__burger" id="sidebarToggle">☰</button>
+      <span class="topbar__title" id="topbarTitle">Dashboard</span>
+      <div class="topbar__points" id="topbarPoints"></div>
+    </header>
+
+    <!-- Sidebar overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="app-main">
+
+      <!-- ===== DASHBOARD ===== -->
+      <section id="view-dashboard" class="view active">
+        <div class="view-header">
+          <div>
+            <h1 id="dashGreeting">Olá! 👋</h1>
+            <p class="view-subtitle">Acompanhe seu progresso de reciclagem</p>
+          </div>
+          <button class="btn btn--primary" onclick="navigate('agendar')">
+            + Agendar Coleta
+          </button>
+        </div>
+
+        <div class="stat-row" id="dashStats"></div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3 class="card-title">📦 Próxima Coleta</h3>
+            <div id="nextPickup"></div>
+          </div>
+          <div class="card">
+            <h3 class="card-title">🕐 Atividade Recente</h3>
+            <div id="recentActivity"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">⚡ Acesso Rápido</h3>
+          <div class="quick-grid">
+            <button class="quick-btn" onclick="navigate('agendar')">
+              <span>📦</span>
+              <strong>Agendar Coleta</strong>
+              <small>Porta a porta</small>
+            </button>
+            <button class="quick-btn" onclick="navigate('mapa')">
+              <span>📍</span>
+              <strong>Encontrar Ponto</strong>
+              <small>Ecoponto próximo</small>
+            </button>
+            <button class="quick-btn" onclick="navigate('classificar')">
+              <span>🤖</span>
+              <strong>Classificar</strong>
+              <small>Identificar resíduo</small>
+            </button>
+            <button class="quick-btn" onclick="navigate('recompensas')">
+              <span>🎁</span>
+              <strong>Recompensas</strong>
+              <small>Ver meus pontos</small>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== AGENDAR ===== -->
+      <section id="view-agendar" class="view" hidden>
+        <div class="view-header">
+          <div>
+            <h1>Agendar Coleta</h1>
+            <p class="view-subtitle">Coleta domiciliar porta a porta</p>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3 class="card-title">Nova Coleta</h3>
+            <form id="pickupForm">
+              <div class="field">
+                <label>Data da coleta</label>
+                <input type="date" id="pickupDate" required>
+              </div>
+              <div class="field">
+                <label>Horário preferido</label>
+                <select id="pickupTime" required>
+                  <option value="">Selecione o horário...</option>
+                  <option value="08:00–10:00">Manhã · 08:00–10:00</option>
+                  <option value="10:00–12:00">Manhã · 10:00–12:00</option>
+                  <option value="13:00–15:00">Tarde · 13:00–15:00</option>
+                  <option value="15:00–17:00">Tarde · 15:00–17:00</option>
+                  <option value="17:00–19:00">Fim de tarde · 17:00–19:00</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Materiais para coletar</label>
+                <div class="chip-group" id="materialChips">
+                  <label class="chip-label"><input type="checkbox" value="Papel"> <span>📄 Papel</span></label>
+                  <label class="chip-label"><input type="checkbox" value="Plástico"> <span>🧴 Plástico</span></label>
+                  <label class="chip-label"><input type="checkbox" value="Metal"> <span>🥫 Metal</span></label>
+                  <label class="chip-label"><input type="checkbox" value="Vidro"> <span>🍾 Vidro</span></label>
+                  <label class="chip-label"><input type="checkbox" value="Orgânico"> <span>🥬 Orgânico</span></label>
+                  <label class="chip-label"><input type="checkbox" value="Eletrônicos"> <span>📱 Eletrônicos</span></label>
+                </div>
+              </div>
+              <div class="field">
+                <label>Peso estimado (kg)</label>
+                <input type="number" id="pickupWeight" placeholder="Ex: 5" min="0.5" step="0.5">
+              </div>
+              <div class="field">
+                <label>Observações (opcional)</label>
+                <textarea id="pickupObs" placeholder="Ex: Portão azul, ligar antes..." rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn--primary btn--full">✅ Confirmar Agendamento</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Coletas Agendadas</h3>
+            <div id="pickupList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== MAPA ===== -->
+      <section id="view-mapa" class="view" hidden>
+        <div class="view-header">
+          <div>
+            <h1>Pontos de Coleta</h1>
+            <p class="view-subtitle">Encontre o ecoponto mais próximo</p>
+          </div>
+        </div>
+
+        <div class="card p-0">
+          <div class="map-filter-bar">
+            <button class="filter-btn active" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="Papel">📄 Papel</button>
+            <button class="filter-btn" data-filter="Plástico">🧴 Plástico</button>
+            <button class="filter-btn" data-filter="Metal">🥫 Metal</button>
+            <button class="filter-btn" data-filter="Vidro">🍾 Vidro</button>
+            <button class="filter-btn" data-filter="Eletrônicos">📱 Eletrônicos</button>
+            <button class="filter-btn" data-filter="Orgânico">🥬 Orgânico</button>
+          </div>
+          <div id="map"></div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h3 class="card-title">Pontos Encontrados</h3>
+          <div id="pointsList"></div>
+        </div>
+      </section>
+
+      <!-- ===== CLASSIFICAR ===== -->
+      <section id="view-classificar" class="view" hidden>
+        <div class="view-header">
+          <div>
+            <h1>Classificar Resíduo</h1>
+            <p class="view-subtitle">Saiba como descartar cada material corretamente</p>
+          </div>
+        </div>
+
+        <div class="classifier-wrap">
+          <div class="card">
+            <h3 class="card-title">Selecione o resíduo</h3>
+            <div class="waste-grid" id="wasteGrid"></div>
+          </div>
+          <div class="card" id="wasteResult">
+            <div class="waste-empty">
+              <div style="font-size:3rem">🔍</div>
+              <p>Clique em um resíduo para ver como descartar corretamente</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== IMPACTO ===== -->
+      <section id="view-impacto" class="view" hidden>
+        <div class="view-header">
+          <div>
+            <h1>Meu Impacto</h1>
+            <p class="view-subtitle">Sua contribuição para o planeta</p>
+          </div>
+        </div>
+
+        <div class="stat-row" id="impactStats"></div>
+
+        <div class="card" style="margin-top:16px">
+          <h3 class="card-title">🎯 Meta do Mês</h3>
+          <div id="impactGoal"></div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h3 class="card-title">📋 Histórico de Coletas</h3>
+          <div id="pickupHistory"></div>
+        </div>
+      </section>
+
+      <!-- ===== RECOMPENSAS ===== -->
+      <section id="view-recompensas" class="view" hidden>
+        <div class="view-header">
+          <div>
+            <h1>Recompensas</h1>
+            <p class="view-subtitle">Troque seus pontos por benefícios reais</p>
+          </div>
+        </div>
+
+        <div class="card points-hero" id="pointsHero"></div>
+
+        <div class="card" style="margin-top:16px">
+          <h3 class="card-title">Resgatar Recompensas</h3>
+          <div class="rewards-grid" id="rewardsGrid"></div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h3 class="card-title">Histórico de Pontos</h3>
+          <div id="pointsHistory"></div>
+        </div>
+      </section>
+
+      <!-- ===== COLETAS DISPONÍVEIS (COLETOR) ===== -->
+      <section id="view-coletas" class="view" hidden>
+        <div class="view-header">
+          <div>
+            <h1>Coletas Disponíveis</h1>
+            <p class="view-subtitle">Aceite coletas de reciclagem na sua região</p>
+          </div>
+          <button class="btn btn--ghost" onclick="renderCollector()">🔄 Atualizar</button>
+        </div>
+
+        <div class="card">
+          <div class="pool-tabs">
+            <button class="pool-tab active" data-pool-tab="disponiveis">📋 Disponíveis</button>
+            <button class="pool-tab" data-pool-tab="minhas">🚛 Minhas Coletas</button>
+          </div>
+          <div id="poolDisponiveis" style="margin-top:16px"></div>
+          <div id="poolMinhas" style="margin-top:16px" hidden></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Confirm modal for deleting pickups -->
+<div class="modal-overlay" id="confirmOverlay" aria-hidden="true">
+  <div class="confirm-modal">
+    <h3>Cancelar coleta?</h3>
+    <p>Esta ação não pode ser desfeita.</p>
+    <div class="confirm-btns">
+      <button class="btn btn--ghost" id="confirmNo">Voltar</button>
+      <button class="btn btn--danger" id="confirmYes">Cancelar coleta</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -81,8 +81,11 @@ document.querySelectorAll('.stat-item__num[data-target]').forEach(el => {
 
 /* ===== Smooth scroll for anchor links ===== */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
+  if (a.hasAttribute('data-modal')) return;
   a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
+    const href = a.getAttribute('href');
+    if (href === '#') return;
+    const target = document.querySelector(href);
     if (target) {
       e.preventDefault();
       const offset = 76;
@@ -90,4 +93,75 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       window.scrollTo({ top, behavior: 'smooth' });
     }
   });
+});
+
+/* ===== Toast ===== */
+let toastTimer;
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+/* ===== Waitlist Modal ===== */
+const modalOverlay  = document.getElementById('modalOverlay');
+const modalClose    = document.getElementById('modalClose');
+const modalFormView = document.getElementById('modalFormView');
+const modalSuccessView = document.getElementById('modalSuccessView');
+const waitlistForm  = document.getElementById('waitlistForm');
+const waitlistSubmit = document.getElementById('waitlistSubmit');
+const modalDone     = document.getElementById('modalDone');
+
+function openModal() {
+  modalFormView.hidden = false;
+  modalSuccessView.hidden = true;
+  waitlistForm.reset();
+  waitlistForm.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+  waitlistSubmit.disabled = false;
+  waitlistSubmit.innerHTML = 'Garantir minha vaga <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+  modalOverlay.classList.add('open');
+  modalOverlay.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('wName').focus(), 320);
+}
+
+function closeModal() {
+  modalOverlay.classList.remove('open');
+  modalOverlay.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('[data-modal]').forEach(el => {
+  el.addEventListener('click', e => { e.preventDefault(); openModal(); });
+});
+
+modalClose.addEventListener('click', closeModal);
+modalDone.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+waitlistForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const name  = document.getElementById('wName');
+  const email = document.getElementById('wEmail');
+  let valid = true;
+
+  [name, email].forEach(f => f.classList.remove('field-error'));
+
+  if (!name.value.trim()) { name.classList.add('field-error'); valid = false; }
+  if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    email.classList.add('field-error'); valid = false;
+  }
+  if (!valid) return;
+
+  waitlistSubmit.disabled = true;
+  waitlistSubmit.textContent = 'Enviando...';
+
+  setTimeout(() => {
+    modalFormView.hidden = true;
+    modalSuccessView.hidden = false;
+    showToast('✅ Você entrou na lista de espera!');
+  }, 900);
 });
