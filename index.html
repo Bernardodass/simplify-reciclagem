@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simplify Reciclagem — Recicle sem complicação</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo">
+        <span class="logo-icon">♻</span>
+        <span>Simplify</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#beneficios">Benefícios</a></li>
+        <li><a href="#impacto">Impacto</a></li>
+        <li><a href="#empresas">Empresas</a></li>
+      </ul>
+      <a href="#baixar" class="btn btn--nav">Baixar app</a>
+      <button class="nav__burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav__mobile" id="mobileMenu">
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#beneficios">Benefícios</a>
+      <a href="#impacto">Impacto</a>
+      <a href="#empresas">Empresas</a>
+      <a href="#baixar" class="btn btn--primary">Baixar app</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="hero__bg">
+      <div class="hero__blob hero__blob--1"></div>
+      <div class="hero__blob hero__blob--2"></div>
+    </div>
+    <div class="container hero__inner">
+      <div class="hero__text">
+        <div class="hero__badge">🌱 Plataforma de reciclagem inteligente</div>
+        <h1 class="hero__title">
+          Recicle com a mesma facilidade de pedir um
+          <span class="highlight">delivery</span>
+        </h1>
+        <p class="hero__subtitle">
+          A Simplify conecta você ao ecossistema de reciclagem mais próximo. Agende coletas, descubra pontos de entrega e acompanhe seu impacto ambiental — tudo em um só app.
+        </p>
+        <div class="hero__actions">
+          <a href="#baixar" class="btn btn--primary btn--lg">
+            Começar agora
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#como-funciona" class="btn btn--ghost btn--lg">Ver como funciona</a>
+        </div>
+        <div class="hero__social-proof">
+          <div class="avatars">
+            <img src="https://i.pravatar.cc/40?img=1" alt="" />
+            <img src="https://i.pravatar.cc/40?img=2" alt="" />
+            <img src="https://i.pravatar.cc/40?img=3" alt="" />
+            <img src="https://i.pravatar.cc/40?img=4" alt="" />
+          </div>
+          <p><strong>+50 mil</strong> cidadãos já simplificaram sua reciclagem</p>
+        </div>
+      </div>
+      <div class="hero__visual">
+        <div class="phone-mockup">
+          <div class="phone-screen">
+            <div class="app-header">
+              <span class="app-greeting">Olá, Bernardo 👋</span>
+              <div class="app-notif">🔔</div>
+            </div>
+            <div class="app-card app-card--green">
+              <div class="app-card__icon">📦</div>
+              <div>
+                <div class="app-card__label">Coleta agendada</div>
+                <div class="app-card__value">Hoje, 14h00</div>
+              </div>
+              <div class="app-card__badge">Confirmado</div>
+            </div>
+            <div class="app-section-title">Seu impacto este mês</div>
+            <div class="app-stats">
+              <div class="app-stat">
+                <div class="app-stat__num">12<span>kg</span></div>
+                <div class="app-stat__label">Reciclados</div>
+              </div>
+              <div class="app-stat">
+                <div class="app-stat__num">8</div>
+                <div class="app-stat__label">Coletas</div>
+              </div>
+              <div class="app-stat">
+                <div class="app-stat__num">🌳 4</div>
+                <div class="app-stat__label">Árvores salvas</div>
+              </div>
+            </div>
+            <div class="app-section-title">Pontos próximos</div>
+            <div class="app-map-placeholder">
+              <div class="map-pin" style="top:35%;left:40%">📍</div>
+              <div class="map-pin" style="top:55%;left:65%">📍</div>
+              <div class="map-pin" style="top:25%;left:70%">📍</div>
+              <span class="map-label">3 pontos de coleta a menos de 1 km</span>
+            </div>
+            <div class="app-section-title">Materiais aceitos</div>
+            <div class="app-chips">
+              <span class="chip chip--blue">Papel</span>
+              <span class="chip chip--yellow">Plástico</span>
+              <span class="chip chip--red">Metal</span>
+              <span class="chip chip--green">Vidro</span>
+              <span class="chip chip--brown">Orgânico</span>
+            </div>
+          </div>
+          <div class="phone-home-bar"></div>
+        </div>
+        <div class="floating-card floating-card--1">
+          <span>🎉</span>
+          <div>
+            <strong>+2 kg reciclados!</strong>
+            <small>Parabéns, continue assim</small>
+          </div>
+        </div>
+        <div class="floating-card floating-card--2">
+          <span>⚡</span>
+          <div>
+            <strong>Coleta em 20 min</strong>
+            <small>Coletor a caminho</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero__scroll-indicator">
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section class="section" id="como-funciona">
+    <div class="container">
+      <div class="section__header">
+        <div class="section__badge">Processo simples</div>
+        <h2 class="section__title">Tão fácil quanto pedir um Uber</h2>
+        <p class="section__subtitle">Em 3 passos você já está contribuindo para um mundo mais sustentável</p>
+      </div>
+      <div class="steps">
+        <div class="step" data-step="1">
+          <div class="step__line"></div>
+          <div class="step__num">01</div>
+          <div class="step__icon">📱</div>
+          <h3 class="step__title">Baixe o app e cadastre-se</h3>
+          <p class="step__desc">Crie sua conta em menos de 2 minutos. Informe seu endereço e os tipos de resíduos que gera no dia a dia.</p>
+        </div>
+        <div class="step" data-step="2">
+          <div class="step__line"></div>
+          <div class="step__num">02</div>
+          <div class="step__icon">📅</div>
+          <h3 class="step__title">Agende ou localize pontos</h3>
+          <p class="step__desc">Agende uma coleta em casa ou encontre o ponto de entrega mais próximo no mapa interativo.</p>
+        </div>
+        <div class="step" data-step="3">
+          <div class="step__num">03</div>
+          <div class="step__icon">🌱</div>
+          <h3 class="step__title">Acompanhe seu impacto</h3>
+          <p class="step__desc">Receba confirmação da coleta e veja em tempo real quanto você já contribuiu para o meio ambiente.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFÍCIOS -->
+  <section class="section section--alt" id="beneficios">
+    <div class="container">
+      <div class="section__header">
+        <div class="section__badge">Por que Simplify?</div>
+        <h2 class="section__title">Tudo que você precisa para reciclar bem</h2>
+        <p class="section__subtitle">Uma plataforma completa que torna a reciclagem acessível para qualquer pessoa ou empresa</p>
+      </div>
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-card__icon" style="background:#e8f5e9">🗺️</div>
+          <h3>Mapa inteligente</h3>
+          <p>Encontre pontos de coleta, cooperativas e ecopontos próximos com informações detalhadas sobre materiais aceitos.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon" style="background:#e3f2fd">📦</div>
+          <h3>Coleta porta a porta</h3>
+          <p>Agende coletas domiciliares com coletores parceiros verificados, direto pelo app, sem sair de casa.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon" style="background:#fff8e1">🤖</div>
+          <h3>Classificação por IA</h3>
+          <p>Tire uma foto do resíduo e nossa IA identifica o material e indica o descarte correto instantaneamente.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon" style="background:#fce4ec">📊</div>
+          <h3>Dashboard de impacto</h3>
+          <p>Acompanhe kg reciclados, CO₂ evitado, árvores preservadas e compare com a sua comunidade.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon" style="background:#f3e5f5">🎁</div>
+          <h3>Programa de recompensas</h3>
+          <p>Acumule pontos a cada reciclagem e troque por descontos em parceiros, créditos e benefícios exclusivos.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon" style="background:#e0f7fa">🔔</div>
+          <h3>Lembretes e alertas</h3>
+          <p>Receba notificações do dia de coleta na sua rua, promoções de parceiros e dicas de sustentabilidade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPACTO -->
+  <section class="section section--dark" id="impacto">
+    <div class="container">
+      <div class="section__header section__header--light">
+        <div class="section__badge section__badge--light">Nosso impacto</div>
+        <h2 class="section__title">Números que fazem diferença</h2>
+        <p class="section__subtitle">Cada coleta conta. Veja o que já construímos juntos.</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-item__num" data-target="2400000">0</div>
+          <div class="stat-item__label">kg reciclados</div>
+          <div class="stat-item__sub">Equivalente a 480 elefantes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item__num" data-target="50000">0</div>
+          <div class="stat-item__label">Usuários ativos</div>
+          <div class="stat-item__sub">Em 12 cidades brasileiras</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item__num" data-target="1200">0</div>
+          <div class="stat-item__label">Coletores parceiros</div>
+          <div class="stat-item__sub">Catadores e cooperativas</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item__num" data-target="95">0</div>
+          <div class="stat-item__label">% de satisfação</div>
+          <div class="stat-item__sub">Avaliação média 4.9 ⭐</div>
+        </div>
+      </div>
+      <div class="impact-visual">
+        <div class="impact-bar-label">Meta 2026: <strong>10 milhões de kg reciclados</strong></div>
+        <div class="impact-bar-track">
+          <div class="impact-bar-fill" style="width: 24%">
+            <span>24% — 2,4 M kg</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section class="section" id="depoimentos">
+    <div class="container">
+      <div class="section__header">
+        <div class="section__badge">Depoimentos</div>
+        <h2 class="section__title">O que dizem quem já usa</h2>
+      </div>
+      <div class="testimonials">
+        <div class="testimonial-card">
+          <div class="testimonial-card__stars">⭐⭐⭐⭐⭐</div>
+          <p>"Antes eu não sabia separar o lixo direito. Com a Simplify aprendi e ainda ganho pontos por isso. É viciante!"</p>
+          <div class="testimonial-card__author">
+            <img src="https://i.pravatar.cc/48?img=5" alt="Ana Lima" />
+            <div>
+              <strong>Ana Lima</strong>
+              <small>São Paulo, SP</small>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card testimonial-card--featured">
+          <div class="testimonial-card__stars">⭐⭐⭐⭐⭐</div>
+          <p>"A coleta porta a porta mudou minha rotina. Agendar é mais fácil do que pedir pizza — e ainda ajudo o planeta."</p>
+          <div class="testimonial-card__author">
+            <img src="https://i.pravatar.cc/48?img=8" alt="Carlos Mendes" />
+            <div>
+              <strong>Carlos Mendes</strong>
+              <small>Belo Horizonte, MG</small>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-card__stars">⭐⭐⭐⭐⭐</div>
+          <p>"Nossa empresa reduziu 60% do lixo enviado para aterro. O dashboard corporativo é incrível para relatórios de ESG."</p>
+          <div class="testimonial-card__author">
+            <img src="https://i.pravatar.cc/48?img=12" alt="Fernanda Costa" />
+            <div>
+              <strong>Fernanda Costa</strong>
+              <small>Gestora ambiental, Rio de Janeiro</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMPRESAS -->
+  <section class="section section--alt" id="empresas">
+    <div class="container">
+      <div class="empresas__inner">
+        <div class="empresas__text">
+          <div class="section__badge">Para empresas</div>
+          <h2 class="section__title" style="text-align:left">Gestão de resíduos corporativa inteligente</h2>
+          <p>Integre a Simplify ao seu programa de sustentabilidade. Tenha controle total sobre os resíduos gerados, relatórios automáticos de ESG e economize na gestão de resíduos.</p>
+          <ul class="empresas__list">
+            <li>✅ Dashboard corporativo com múltiplas unidades</li>
+            <li>✅ Relatórios automáticos para certificações ambientais</li>
+            <li>✅ Integração com sistemas ERP</li>
+            <li>✅ Coleta programada em escala</li>
+            <li>✅ Rastreamento de destinação final dos resíduos</li>
+            <li>✅ Suporte dedicado e onboarding assistido</li>
+          </ul>
+          <a href="mailto:empresas@simplify.eco" class="btn btn--primary">Falar com especialista</a>
+        </div>
+        <div class="empresas__visual">
+          <div class="corp-dashboard">
+            <div class="corp-dash__header">
+              <span>📊 Dashboard Corporativo</span>
+              <span class="corp-dash__date">Maio 2026</span>
+            </div>
+            <div class="corp-dash__kpis">
+              <div class="corp-kpi">
+                <div class="corp-kpi__val">4.200 kg</div>
+                <div class="corp-kpi__label">Reciclados este mês</div>
+                <div class="corp-kpi__trend corp-kpi__trend--up">↑ 18%</div>
+              </div>
+              <div class="corp-kpi">
+                <div class="corp-kpi__val">R$ 3.800</div>
+                <div class="corp-kpi__label">Economia vs. aterro</div>
+                <div class="corp-kpi__trend corp-kpi__trend--up">↑ 12%</div>
+              </div>
+            </div>
+            <div class="corp-dash__chart-label">Resíduos por tipo (kg)</div>
+            <div class="corp-chart">
+              <div class="corp-bar" style="height:80%;background:#4caf50"><span>Papel<br>1.680</span></div>
+              <div class="corp-bar" style="height:55%;background:#2196f3"><span>Plástico<br>1.155</span></div>
+              <div class="corp-bar" style="height:35%;background:#ff9800"><span>Metal<br>735</span></div>
+              <div class="corp-bar" style="height:25%;background:#9c27b0"><span>Vidro<br>525</span></div>
+              <div class="corp-bar" style="height:15%;background:#795548"><span>Outro<br>315</span></div>
+            </div>
+            <div class="corp-dash__footer">
+              <span>✅ Certificação ISO 14001 — dados prontos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD CTA -->
+  <section class="section section--cta" id="baixar">
+    <div class="cta__blob cta__blob--1"></div>
+    <div class="cta__blob cta__blob--2"></div>
+    <div class="container cta__inner">
+      <div class="cta__text">
+        <h2>Comece a reciclar hoje,<br/>sem complicação</h2>
+        <p>Baixe grátis para iOS e Android. Leva menos de 2 minutos para se cadastrar e agendar sua primeira coleta.</p>
+        <div class="store-btns">
+          <a href="#" class="store-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <div>
+              <small>Disponível na</small>
+              <strong>App Store</strong>
+            </div>
+          </a>
+          <a href="#" class="store-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M3.18 23.76c.3.17.64.24.99.2l12.19-12.19L12.9 8.3 3.18 23.76zm16.9-11.52-2.6-1.5L14 14.2l3.47 3.47 2.61-1.5c.74-.43.74-1.49 0-1.93zm-15.83-9.2c-.06.2-.09.41-.09.64v19.32c0 .23.03.44.09.64l.04.04 10.82-10.82v-.25L4.29 2.99l-.04.05z"/></svg>
+            <div>
+              <small>Disponível no</small>
+              <strong>Google Play</strong>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="cta__image">
+        <div class="cta__phone-wrap">
+          <div class="phone-mockup phone-mockup--sm">
+            <div class="phone-screen">
+              <div class="onboarding">
+                <div class="onboarding__emoji">♻️</div>
+                <div class="onboarding__title">Bem-vindo à<br/><strong>Simplify</strong></div>
+                <div class="onboarding__sub">Recicle. Contribua. Ganhe.</div>
+                <div class="onboarding__btn">Começar agora</div>
+                <div class="onboarding__steps">
+                  <span class="dot dot--active"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+            </div>
+            <div class="phone-home-bar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a href="#" class="nav__logo">
+          <span class="logo-icon">♻</span>
+          <span>Simplify</span>
+        </a>
+        <p>Transformando a reciclagem em um hábito simples e recompensador para todos.</p>
+        <div class="footer__social">
+          <a href="#" aria-label="Instagram">📷</a>
+          <a href="#" aria-label="LinkedIn">💼</a>
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="YouTube">▶️</a>
+        </div>
+      </div>
+      <div class="footer__links">
+        <div class="footer__col">
+          <h4>Plataforma</h4>
+          <a href="#">Como funciona</a>
+          <a href="#">Mapa de coleta</a>
+          <a href="#">Programa de pontos</a>
+          <a href="#">Classificação por IA</a>
+        </div>
+        <div class="footer__col">
+          <h4>Empresas</h4>
+          <a href="#">Planos corporativos</a>
+          <a href="#">ESG & Relatórios</a>
+          <a href="#">API & Integração</a>
+          <a href="#">Parcerias</a>
+        </div>
+        <div class="footer__col">
+          <h4>Suporte</h4>
+          <a href="#">Central de ajuda</a>
+          <a href="#">Blog</a>
+          <a href="#">Contato</a>
+          <a href="#">Trabalhe conosco</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <span>© 2026 Simplify Reciclagem. Todos os direitos reservados.</span>
+        <div>
+          <a href="#">Privacidade</a>
+          <a href="#">Termos de uso</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
